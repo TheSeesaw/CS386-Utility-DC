@@ -1,0 +1,38 @@
+enum Ability {
+  // MAGICMISSLE("Magic Missle", 1, new Effect[])
+
+  private final String name;
+  private final int level;
+  private final List<Effect>
+  
+}
+
+class Effect {
+  private final Mechanic effect;
+  private final int value;
+  private final int duration;
+}
+
+enum Mechanic {
+  DAMAGE, DoT; //DoT = Damage over Time
+}
+
+class BattleEngine {
+  private final Map<Mechanic, MechanicHandler> mechanics;
+  
+  void useAbility(PlayerCharacter source, PlayerCharacter target, Ability ability) {
+    //implementation of calculating damage / effect here
+    for (Effect effect: ability.getEffects()) {
+      MechanicHandler mh = mechanics.get(e.getMechanic());
+      mh.apply(source,target,effect);
+  }
+  
+  private static final class DicePerLevel implements MechanicHandler {
+    int levels = Math.min(effect.getValue(), source.getLevel());
+    int daamge = 0;
+    for (int i = 0; i < levels; ++i) {
+      int roll = (int)(Math.random()*6 + 1);  //rolls a d6
+      damage += roll;
+    }
+    target.decreaseHealth(damage);
+}
