@@ -1,0 +1,5 @@
+Class PlayableCharacter {
+  private int maxHealth;
+  private int health;
+  private final Collection<Abilitiy> abilities;
+  }
