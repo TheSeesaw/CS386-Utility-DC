@@ -7,7 +7,7 @@ public class CharacterObject
    // Toggles whether a character object is alive or not
    public void toggleAlive()
    {
-      if (is_alive.equals(true))
+      if (is_alive)
       {
          this.is_alive = false;
       }
