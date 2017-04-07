@@ -1,42 +1,46 @@
-import javax.swing.JFrame;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.Border;
 import javax.swing.SwingUtilities;
-
-import java.awt.GridLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Component;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.Arrays;
 
-public class PreMadeMaps
+public class PreMadeMaps 
 {
-	static int HEIGHTFINAL;
-	static int WIDTHFINAL;
+	private int fileRows;
+	private int fileColumns;
+    private final List<JButton> buttonList = new ArrayList<JButton>();
 	
-	public void readTextFileHeight()
+	// get the amount of rows from the text file
+	public void readTextFileRows()
 	{
 		BufferedReader br = null;
         try 
 		{
-            br = new BufferedReader(new FileReader("testfilemap.txt"));
+            br = new BufferedReader( new FileReader("testfilemap.txt") );
             String line;
 			
-            while ((line = br.readLine()) != null) 
+            while ( ( line = br.readLine() ) != null ) 
 			{
-				HEIGHTFINAL++;
+				fileRows++;
             }
         } 
-		catch (IOException e) 
+		catch ( IOException e ) 
 		{
             e.printStackTrace();
         } 
@@ -44,7 +48,7 @@ public class PreMadeMaps
 		{
             try 
 			{
-                if (br != null) 
+                if ( br != null ) 
 				{
                     br.close();
                 }
@@ -56,7 +60,8 @@ public class PreMadeMaps
 		}
 	}
 	
-	public void readTextFileWidth()
+	// get the amount of columns from the text file
+	public void readTextFileColumns()
 	{
 		BufferedReader br = null;
         try 
@@ -65,7 +70,7 @@ public class PreMadeMaps
             String line;
 			
             String text = br.readLine();
-			WIDTHFINAL = text.length();
+			fileColumns = text.length();
         } 
 		catch (IOException e) 
 		{
@@ -87,26 +92,25 @@ public class PreMadeMaps
 		}
 	}
 	
-	// create initial JFrame to hold the map
-	// JFrame mapFrame = new JFrame("Dungeons and Dragons Blank Map");
-	// create the array of buttons that represent a tile
-	JButton[][] buttonGrid;
-	
-	// creates a blank map that can be edited at the users choice
-	public void createEmptyMapGrid( int width, int height )
+	// return the index of the button pressed to command line
+    private JButton getGridButton(int row, int column) 
 	{
-		// create the JFrame to hold the grid
-		JFrame mapFrame = new JFrame("Dungeons and Dragons Map");
-		
-		mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mapFrame.setLayout( new GridLayout ( height, width ) );
-		
-		// create actionlistener for mouse click
-		ActionListener listener = new ActionListener() 
+        int index = row * 5 + column;
+        return buttonList.get(index);
+    }
+
+	// create an individual button to place on the grid at position (row, col)
+    private JButton createGridButton(final int row, final int col) 
+	{		
+        final JButton newButton = new JButton();
+        newButton.addActionListener(new ActionListener() 
 		{
-			@Override
-			public void actionPerformed( ActionEvent e )
+            @Override
+            public void actionPerformed(ActionEvent e) 
 			{
+                JButton gridButton = PreMadeMaps.this.getGridButton(row, col);
+                System.out.println("row" + row + ",col" + col);
+				
 				Object source = e.getSource();
 				if ( source instanceof Component )
 				{
@@ -119,62 +123,63 @@ public class PreMadeMaps
 						((Component)source).setBackground( Color.GREEN );
 					}
 				}
-			}
-		};
+            }
+        });
 		
-		// initialize buttonGrid to be JButtons
-		buttonGrid = new JButton[height][width];
-		for ( int i = 0; i < height; i++ )
-		{
-			for ( int j = 0; j < width; j++ )
-			{
-				// create each button for every tile
-				buttonGrid[i][j] = new JButton();
+		Border line = new LineBorder( Color.BLACK );
+		Border margin = new EmptyBorder( 22, 22, 22, 22 );
+		Border compound = new CompoundBorder( line, margin );
+		newButton.setBorder( compound );
+		newButton.setBackground( Color.WHITE );		
 				
-				// sets base color to white
-				buttonGrid[i][j].setForeground( Color.WHITE );
-				buttonGrid[i][j].setBackground( Color.WHITE );
-				buttonGrid[i][j].addActionListener(listener);
-				
-				// sets border color to black
-				Border line = new LineBorder( Color.BLACK );
-				Border margin = new EmptyBorder( 22, 22, 22, 22 );
-				Border compound = new CompoundBorder( line, margin );
-				buttonGrid[i][j].setBorder( compound );
-				
-				mapFrame.add(buttonGrid[i][j]);
-			}
-		}
+        return newButton;
+    }
 
-		/*ERROR HERE FOR NOT RECTANGLE SIZES*/
-		BufferedReader br = null;
+	// create the panel to hold the button grid
+    private JPanel createGridPanel() 
+	{
+        JPanel mapPanel = new JPanel(new GridLayout(fileRows, fileColumns));
+		
+        for (int i = 0; i < fileRows * fileColumns; i++) 
+		{
+            int row = i / fileRows;
+            int col = i % fileColumns;
+            JButton gridButton = createGridButton(row, col);
+            buttonList.add(gridButton);
+            mapPanel.add(gridButton);
+        }
+		
+		// read from the file to create the predesigned map
+		BufferedReader newBufferedReader = null;
         try 
 		{
-            br = new BufferedReader(new FileReader("testfilemap.txt"));
+            newBufferedReader = new BufferedReader(new FileReader("testfilemap.txt"));
             String line;
 			int count = 0;
 			
-            while ((line = br.readLine()) != null) 
+            while ((line = newBufferedReader.readLine()) != null) 
 			{
 				String text = line;
-				if ( text.length() > WIDTHFINAL | text.length() < WIDTHFINAL )
+				text.trim();
+				if ( text.length() > fileColumns | text.length() < fileColumns )
 				{
 					System.out.println("Incorrect file format. Needs to be in a rectangular shape.\n");
 					System.exit(0);
 				}
 				else
 				{
-					for ( int i = 0; i < WIDTHFINAL; i++ )
+					for ( int i=0; i<fileColumns; i++ )
 					{
+						int textCharIsAt = i % fileColumns;
 						if ( text.charAt(i) == '-' )
 						{
-							buttonGrid[count][i].setBackground( Color.BLACK );
-							buttonGrid[count][i].setEnabled(false);
+							buttonList.get(count * fileColumns + i).setBackground( Color.BLACK );
+							buttonList.get(count * fileColumns + i).setEnabled(false);
 						}
 						else
 						{
-							buttonGrid[count][i].setBackground( Color.WHITE );
-							buttonGrid[count][i].setEnabled(true);
+							buttonList.get(count * fileColumns + i).setBackground( Color.WHITE );
+							buttonList.get(count * fileColumns + i).setEnabled(true);
 						}
 					}
 				}
@@ -189,9 +194,9 @@ public class PreMadeMaps
 		{
             try 
 			{
-                if (br != null) 
+                if (newBufferedReader != null) 
 				{
-                    br.close();
+                    newBufferedReader.close();
                 }
             } 
 			catch (IOException ex) 
@@ -200,22 +205,35 @@ public class PreMadeMaps
             }
 		}
 		
-		mapFrame.pack();
-		mapFrame.setVisible( true );
-	}
+        return mapPanel;
+    }
 
-	public static void main(String[] args)
-	{	
-		PreMadeMaps mpp = new PreMadeMaps();
-		mpp.readTextFileHeight();
-		mpp.readTextFileWidth();
-		SwingUtilities.invokeLater( new Runnable() 
+	// create the JFrame to display to the screen
+    private void display() 
+	{
+		// load the rows and columns from the file
+		readTextFileColumns();
+		readTextFileRows();
+		
+		// create the frame 
+        JFrame mapFrame = new JFrame("Dungeons and Dragons Map");
+        mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mapFrame.add(createGridPanel());
+        mapFrame.pack();
+        mapFrame.setLocationRelativeTo(null);
+        mapFrame.setVisible(true);
+    }
+
+    public static void main(String[] args) 
+	{
+        EventQueue.invokeLater(new Runnable() 
 		{
-			@Override
-			public void run()
+            @Override
+            public void run() 
 			{
-				new PreMadeMaps().createEmptyMapGrid( WIDTHFINAL, HEIGHTFINAL );
-			}
-		});
-	}
+                new PreMadeMaps().display();
+            }
+        });
+		
+    }
 }
