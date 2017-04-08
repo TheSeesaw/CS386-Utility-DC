@@ -29,7 +29,7 @@ class BattleEngine {
   
   private static final class DicePerLevel implements MechanicHandler {
     int levels = Math.min(effect.getValue(), source.getLevel());
-    int daamge = 0;
+    int damage = 0;
     for (int i = 0; i < levels; ++i) {
       int roll = (int)(Math.random()*6 + 1);  //rolls a d6
       damage += roll;
