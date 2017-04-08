@@ -45,20 +45,21 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     pane.add(co_tabs, BorderLayout.CENTER);
   }
 
-  private static void createAndShowGUI()
+  public COCreationGUI(String user)
   {
+    String current_user = user;
     // Declare variable for character creation jframe
     JFrame co_window = new JFrame("Create New Character Object");
     co_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     co_window.setSize(600, 800);
 
     // Add content
-    COCreationGUI co_creation = new COCreationGUI();
-    co_creation.addComponentToPane(co_window.getContentPane());
+    this.addComponentToPane(co_window.getContentPane());
 
     // Display the window
     co_window.setVisible(true);
   }
+  /*
   // Taken from TabDemo.java
   public static void main(String[] args) {
       //Schedule a job for the event dispatch thread:
@@ -72,6 +73,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
       }
       );
   }
+  */
 
 
 
