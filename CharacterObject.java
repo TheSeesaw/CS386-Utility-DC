@@ -1,22 +1,14 @@
-public class CharacterObject
+public interface CharacterObject
 {
    public String name;
    public String description;
    private boolean is_alive;
+   public Ability[] abilities;
+   private int current_hp;
+   public static int total_hp;
 
    // Toggles whether a character object is alive or not
-   public void toggleAlive()
-   {
-      if (is_alive)
-      {
-         this.is_alive = false;
-      }
-      else
-      {
-         // is_alive must be false, so make it true
-         this.is_alive = true;
-      }
-   }
+   public void toggleAlive();
 
    /* attacks are int arrays that hold eight values:
       0: attack bonus
@@ -29,13 +21,6 @@ public class CharacterObject
       7: damage bonus
    */
    // The attack target receives the attack and takes damage if it hits
-   public void useAttack(int[] selected_attack, CharacterObject attack_target)
-   {
-
-   }
-
-   public void useAbility()
-   {
-
-   }
+   public void useAttack(int[] selected_attack, CharacterObject attack_target);
+   public void useAbility();
 }
