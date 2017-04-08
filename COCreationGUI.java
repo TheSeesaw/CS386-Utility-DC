@@ -45,7 +45,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     pane.add(co_tabs, BorderLayout.CENTER);
   }
 
-  public static void COCreationGUI(String user)
+  public COCreationGUI(String user)
   {
     String current_user = user;
     // Declare variable for character creation jframe
@@ -54,8 +54,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     co_window.setSize(600, 800);
 
     // Add content
-    COCreationGUI co_creation = new COCreationGUI();
-    co_creation.addComponentToPane(co_window.getContentPane());
+    this.addComponentToPane(co_window.getContentPane());
 
     // Display the window
     co_window.setVisible(true);
