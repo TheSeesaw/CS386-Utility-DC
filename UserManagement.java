@@ -16,22 +16,8 @@ public class UserManagement
     this.userFile = userFile;
     users  = new HashSet<User>();
     userFile = new File("users.txt");
-     // creates the file
-     userFile.createNewFile();
-     this.userFile = userFile;
-     // creates a FileWriter Object
-     writer = new FileWriter( userFile );
-    addUsersFromList( userFile );
-    Iterator<User> iterator = users.iterator();
-    String userString = "";
-    User currentUser;
-    while( iterator.hasNext() )
-    {
-      currentUser = iterator.next();
-      userString += "" + currentUser.getUserName() + ", " + currentUser.getPassword() + "\n";
 
-    }
-      System.out.println( userString );
+    addUsersFromList( userFile );
   }
 
   // a request for a login: return the user if successful, null if unsuccessful
