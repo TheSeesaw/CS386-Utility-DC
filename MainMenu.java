@@ -49,6 +49,13 @@ public class MainMenu
           COCreationGUI co_window = new COCreationGUI(validUser);
           frame.setVisible( false );
         }
+		// handle map creation button
+		else if( e.getActionCommand().equals( "Map Creation" ) )
+        {
+		  // enter the name of the text file you will load here 
+          PreMadeMaps maps_window = new PreMadeMaps("testfilemap2.txt");
+          frame.setVisible( false );
+        }
       }
   }
 }
