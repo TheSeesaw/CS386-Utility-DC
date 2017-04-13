@@ -29,12 +29,24 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   // --DEVELOPMENT--
   // NPC object
   NonPlayerCharacter test_npc = new NonPlayerCharacter();
-  JLabel alignment_t = new JLabel("Alignment: ");
+
+  // Details display variables
   JLabel alignment_d = new JLabel(test_npc.getAlign());
-  JLabel race_t = new JLabel("Race: ");
   JLabel race_d = new JLabel(test_npc.getRace());
-  JLabel job_t = new JLabel("Class: ");
   JLabel job_d = new JLabel(test_npc.getJob());
+
+  // Base stats display variables
+  JLabel str_d = new JLabel(Integer.toString(test_npc.getAttributes()[0]));
+  JLabel dex_d = new JLabel(Integer.toString(test_npc.getAttributes()[1]));
+  JLabel con_d = new JLabel(Integer.toString(test_npc.getAttributes()[2]));
+  JLabel int_d = new JLabel(Integer.toString(test_npc.getAttributes()[3]));
+  JLabel wis_d = new JLabel(Integer.toString(test_npc.getAttributes()[4]));
+  JLabel cha_d = new JLabel(Integer.toString(test_npc.getAttributes()[5]));
+
+  // Saving throw display variables
+  JLabel fort_d = new JLabel();
+  JLabel ref_d = new JLabel();
+  JLabel will_d = new JLabel();
 
   // Card labels for the layout with description of contents
   // Character fluff details, also includes race and class
@@ -58,6 +70,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     JPanel details = new JPanel();
     details.setLayout(new BoxLayout(details, BoxLayout.PAGE_AXIS));
     JPanel base_stats = new JPanel();
+    base_stats.setLayout(new BoxLayout(base_stats, BoxLayout.PAGE_AXIS));
     JPanel combat_stats = new JPanel();
     JPanel skills_feats = new JPanel();
     JPanel gear_items = new JPanel();
@@ -67,7 +80,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     back.addActionListener(new ButtonListener());
     back.setActionCommand("back");
 
-    // Details panel functionality
+    // Details panel functionality==============================================
 
     // Character Object name
     JLabel name = new JLabel("Name: ");
@@ -80,6 +93,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     details.add(co_desc_field);
 
     // Alignment option (randomly generated)
+    JLabel alignment_t = new JLabel("Alignment: ");
     details.add(alignment_t);
     details.add(alignment_d);
     JButton gen_align = new JButton("Random");
@@ -104,6 +118,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     details.add(option_na);
 
     // Race option (randomly generated)
+    JLabel race_t = new JLabel("Race: ");
     details.add(race_t);
     details.add(race_d);
     JButton gen_race = new JButton("Random");
@@ -112,12 +127,56 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     details.add(gen_race);
 
     // Class option (randomly generated)
+    JLabel job_t = new JLabel("Class: ");
     details.add(job_t);
     details.add(job_d);
     JButton gen_job = new JButton("Random");
     gen_job.addActionListener(new ButtonListener());
     gen_job.setActionCommand("job gen");
     details.add(gen_job);
+
+    // Base stats implementation================================================
+
+    // Labels for displaying base attributes
+    JLabel attributes_t = new JLabel("Attributes: \n");
+    base_stats.add(attributes_t);
+    // Add the labels to the panel
+    JLabel str_t = new JLabel("STR:");
+    base_stats.add(str_t);
+    base_stats.add(str_d);
+    JLabel dex_t = new JLabel("DEX:");
+    base_stats.add(dex_t);
+    base_stats.add(dex_d);
+    JLabel con_t = new JLabel("CON:");
+    base_stats.add(con_t);
+    base_stats.add(con_d);
+    JLabel int_t = new JLabel("INT:");
+    base_stats.add(int_t);
+    base_stats.add(int_d);
+    JLabel wis_t = new JLabel("WIS:");
+    base_stats.add(wis_t);
+    base_stats.add(wis_d);
+    JLabel cha_t = new JLabel("CHA:");
+    base_stats.add(cha_t);
+    base_stats.add(cha_d);
+    // Generate random attributes
+    //TODO: functionality to choose generation algorithm at run time
+    JButton gen_attributes = new JButton("Random");
+    gen_attributes.addActionListener(new ButtonListener());
+    gen_attributes.setActionCommand("stats gen");
+    base_stats.add(gen_attributes);
+    // Labels for displaying saving throws
+    JLabel saves_t = new JLabel("Saving Throws: \n");
+    JLabel forts_t = new JLabel("Fortitude: \n");
+    JLabel ref_t = new JLabel("Reflex: \n");
+    JLabel will_t = new JLabel("Will: \n");
+    //NOTE: temporary button until listener implementation is fixed
+    JButton update_saves = new JButton("Update");
+    update_saves.addActionListener(new ButtonListener());
+    update_saves.setActionCommand("update saves");
+    base_stats.add(update_saves);
+
+
 
     // Add the panel to the pane
     co_tabs.addTab(DETAILSPANEL, details);
@@ -126,9 +185,11 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     co_tabs.addTab(SKILLSFEATS, skills_feats);
     co_tabs.addTab(GEARITEMS, gear_items);
     co_tabs.addTab(SPELLSABILITIES, spells_abilities);
-    // Add the save button to all the panels
+    // Add the save and back buttons to all the panels
     details.add(save);
     details.add(back);
+    base_stats.add(save);
+    base_stats.add(back);
     // Add this component to the pane passed into this function
     pane.add(co_tabs, BorderLayout.CENTER);
   }
@@ -150,13 +211,22 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
    class ButtonListener implements ActionListener
    {
      ButtonListener()
-      {
-      }
+     {
+     }
      public void actionPerformed( ActionEvent event )
      {
          String buttonActionCommand = event.getActionCommand();
+         //TODO: a listener for when job or attributes change that automatically calls calculateSavingThrows()
          switch (buttonActionCommand)
          {
+            case "update saves":
+               // re-calculate saves and display results
+               tools.calculateSavingThrows(test_npc);
+               // Update display labels
+               fort_d.setText(Integer.toString(test_npc.getSaves()[0]));
+               ref_d.setText(Integer.toString(test_npc.getSaves()[1]));
+               will_d.setText(Integer.toString(test_npc.getSaves()[2]));
+               break;
             case "align gen":
                // Generate a random alignment
                int align_num = Utilities.randGenN(9);
@@ -177,6 +247,18 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
                // DEVELOPMENT
                test_npc.setJob(npc_job_array[job_num]);
                job_d.setText(test_npc.getJob());
+               break;
+            case "stats gen":
+               // Generate a new set of ability scores
+               // NOTE: classic is hard coded into the statement
+               tools.generateAttributes(test_npc, "classic");
+               // Update the display labels
+               str_d.setText(Integer.toString(test_npc.getAttributes()[0]));
+               dex_d.setText(Integer.toString(test_npc.getAttributes()[1]));
+               con_d.setText(Integer.toString(test_npc.getAttributes()[2]));
+               int_d.setText(Integer.toString(test_npc.getAttributes()[3]));
+               wis_d.setText(Integer.toString(test_npc.getAttributes()[4]));
+               cha_d.setText(Integer.toString(test_npc.getAttributes()[5]));
                break;
             case "save":
                /*
