@@ -1,14 +1,41 @@
-public interface CharacterObject
+abstract class CharacterObject
 {
-   public String name;
-   public String description;
-   private boolean is_alive;
-   public Ability[] abilities;
-   private int current_hp;
-   public static int total_hp;
+   private String name = "";
+   private String description = "";
+   private String alignment = "N";
+   private boolean is_alive = true;
+   //public Ability[] abilities = null;
+   private int current_hp = 1;
+   private static int total_hp = 1;
 
+   // Setters
+   void setName(String a_name)
+   {
+      this.name = a_name;
+   }
+   void setDesc(String a_desc)
+   {
+      this.description = a_desc;
+   }
+   void setAlign(String an_align)
+   {
+      this.alignment = an_align;
+   }
+   // Getters
+   String getName()
+   {
+      return this.name;
+   }
+   String getDesc()
+   {
+      return this.description;
+   }
+   String getAlign()
+   {
+      return this.alignment;
+   }
    // Toggles whether a character object is alive or not
-   public void toggleAlive();
+   abstract void toggleAlive();
 
    /* attacks are int arrays that hold eight values:
       0: attack bonus
@@ -21,6 +48,6 @@ public interface CharacterObject
       7: damage bonus
    */
    // The attack target receives the attack and takes damage if it hits
-   public void useAttack(int[] selected_attack, CharacterObject attack_target);
-   public void useAbility();
+   abstract void useAttack(int[] selected_attack, CharacterObject attack_target);
+   abstract void useAbility();
 }

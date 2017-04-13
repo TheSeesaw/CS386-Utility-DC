@@ -46,7 +46,7 @@ public class MainMenu
         {
           //COCreationGUI characterCreation = new COCreationGUI();
           String[] a = {""};
-          COCreationGUI co_window = new COCreationGUI("banana");
+          COCreationGUI co_window = new COCreationGUI(validUser);
           frame.setVisible( false );
         }
       }

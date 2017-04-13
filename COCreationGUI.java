@@ -1,15 +1,41 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
 
 
 public class COCreationGUI //extends JFrame implements ActionListener, WindowListener, ItemListener
 {
   // Look at all these variables
+  String[] alignment_array = {"LG", "NG", "CG", "LN", "N", "CN", "LE", "NE", "CE"};
   String[] race_array = {"Dwarf", "Elf", "Gnome", "Half-Elf", "Half-Orc", "Halfling", "Human"};
   String[] npc_job_array = {"Adept", "Aristocrat", "Commoner", "Expert", "Warrior"};
   // Tools object, allows access to methods in Utilities
   Utilities tools = new Utilities();
+  // Save button
+  JButton save = new JButton("Save Changes");
+  // Back button
+  JButton back = new JButton("Back to Menu");
+
+  // Declare variable for character creation jframe, made global for disposing purposes
+  JFrame co_window = new JFrame("Create New Character Object");
+  User current_user;
+
+  // Initialize name and description
+  JTextField co_name_field = new JTextField("Enter a name here", 40);
+  String co_name = "";
+  JTextField co_desc_field = new JTextField("Enter a description here", 40);
+  String co_desc = "";
+  // --DEVELOPMENT--
+  // NPC object
+  NonPlayerCharacter test_npc = new NonPlayerCharacter();
+  JLabel alignment_t = new JLabel("Alignment: ");
+  JLabel alignment_d = new JLabel(test_npc.getAlign());
+  JLabel race_t = new JLabel("Race: ");
+  JLabel race_d = new JLabel(test_npc.getRace());
+  JLabel job_t = new JLabel("Class: ");
+  JLabel job_d = new JLabel(test_npc.getJob());
+
   // Card labels for the layout with description of contents
   // Character fluff details, also includes race and class
   final static String DETAILSPANEL = "Details";
@@ -36,12 +62,34 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     JPanel skills_feats = new JPanel();
     JPanel gear_items = new JPanel();
     JPanel spells_abilities = new JPanel();
+    save.addActionListener(new ButtonListener());
+    save.setActionCommand("save");
+    back.addActionListener(new ButtonListener());
+    back.setActionCommand("back");
 
-    // Add a button for visibility
     // Details panel functionality
+
+    // Character Object name
+    JLabel name = new JLabel("Name: ");
+    details.add(name);
+    details.add(co_name_field);
+
+    // Character object description
+    JLabel desc = new JLabel("Description: ");
+    details.add(desc);
+    details.add(co_desc_field);
+
+    // Alignment option (randomly generated)
+    details.add(alignment_t);
+    details.add(alignment_d);
+    JButton gen_align = new JButton("Random");
+    gen_align.addActionListener(new ButtonListener());
+    gen_align.setActionCommand("align gen");
+    details.add(gen_align);
+
+    // Gender options
     JLabel gender = new JLabel("Gender: ");
     details.add(gender);
-    // Gender options
     JRadioButton option_m = new JRadioButton("Male");
     JRadioButton option_f = new JRadioButton("Female");
     JRadioButton option_na = new JRadioButton("N/A");
@@ -56,15 +104,20 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     details.add(option_na);
 
     // Race option (randomly generated)
-    JLabel race = new JLabel("Race: ");
-    details.add(race);
-    // TODO: Add a text box displaying character race
+    details.add(race_t);
+    details.add(race_d);
     JButton gen_race = new JButton("Random");
     gen_race.addActionListener(new ButtonListener());
     gen_race.setActionCommand("race gen");
     details.add(gen_race);
 
-    JLabel job = new JLabel("Class: ");
+    // Class option (randomly generated)
+    details.add(job_t);
+    details.add(job_d);
+    JButton gen_job = new JButton("Random");
+    gen_job.addActionListener(new ButtonListener());
+    gen_job.setActionCommand("job gen");
+    details.add(gen_job);
 
     // Add the panel to the pane
     co_tabs.addTab(DETAILSPANEL, details);
@@ -73,15 +126,17 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     co_tabs.addTab(SKILLSFEATS, skills_feats);
     co_tabs.addTab(GEARITEMS, gear_items);
     co_tabs.addTab(SPELLSABILITIES, spells_abilities);
+    // Add the save button to all the panels
+    details.add(save);
+    details.add(back);
     // Add this component to the pane passed into this function
     pane.add(co_tabs, BorderLayout.CENTER);
   }
 
-  public COCreationGUI(String user)
+  public COCreationGUI(User user)
   {
-    String current_user = user;
-    // Declare variable for character creation jframe
-    JFrame co_window = new JFrame("Create New Character Object");
+    current_user = user;
+
     co_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     co_window.setSize(600, 800);
 
@@ -99,22 +154,56 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
       }
      public void actionPerformed( ActionEvent event )
      {
-      String buttonActionCommand = event.getActionCommand();
-      switch (buttonActionCommand)
-      {
-         //case ""
-         case "create":
-            // Create a text box to enter the name of the new character object
-            //status_label.setText("Please Enter a the Character's name");
-            break;
-         case "save":
-            /*
-             Call a helper function that opens a new file,
-               writes the current character info string to it,
-               then closes the file.
-            */
-            break;
-      }
+         String buttonActionCommand = event.getActionCommand();
+         switch (buttonActionCommand)
+         {
+            case "align gen":
+               // Generate a random alignment
+               int align_num = Utilities.randGenN(9);
+               test_npc.setAlign(alignment_array[align_num]);
+               alignment_d.setText(test_npc.getAlign());
+               break;
+            case "race gen":
+               // Generate a random number and use it to index the race array
+               int race_num = Utilities.randGenN(7);
+               // DEVELOPMENT
+               // set the npc race
+               test_npc.setRace(race_array[race_num]);
+               // set the label
+               race_d.setText(test_npc.getRace());
+               break;
+            case "job gen":
+               int job_num = Utilities.randGenN(5);
+               // DEVELOPMENT
+               test_npc.setJob(npc_job_array[job_num]);
+               job_d.setText(test_npc.getJob());
+               break;
+            case "save":
+               /*
+                Call a helper function that opens a new file,
+                  writes the current character info string to it,
+                  then closes the file.
+               */
+               // Pull the character object attributes from the text fields
+               test_npc.setName(co_name_field.getText());
+               test_npc.setDesc(co_desc_field.getText());
+               try
+               {
+                  int error_code = tools.saveCharacterObject(test_npc, "character");
+               }
+               catch(IOException ioe)
+               {
+                  // Handle exception here
+               }
+               break;
+            case "back":
+               //TODO: prompt the user to save their character object
+               // Return to the menu
+               co_window.setVisible(false);
+               co_window.dispose();
+               MainMenu mainMenu = new MainMenu( current_user );
+               break;
+         }
      }
    }
 }
