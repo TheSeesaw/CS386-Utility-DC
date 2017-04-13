@@ -22,9 +22,19 @@ import java.io.IOException;
 
 public class PreMadeMaps 
 {
+	// holds the name of the text file entered in MainMenu.java
+	private String mapTextName;
+	
 	private int fileRows;
 	private int fileColumns;
     private final List<JButton> buttonList = new ArrayList<JButton>();
+	
+	// initialize the Map using the entered text file
+	public PreMadeMaps(String mapTextName)
+	{
+		this.mapTextName = mapTextName;
+		display();
+	}
 	
 	// get the amount of rows from the text file
 	public void readTextFileRows()
@@ -32,7 +42,7 @@ public class PreMadeMaps
 		BufferedReader br = null;
         try 
 		{
-            br = new BufferedReader( new FileReader("testfilemap.txt") );
+            br = new BufferedReader( new FileReader(mapTextName) );
             String line;
 			
             while ( ( line = br.readLine() ) != null ) 
@@ -66,7 +76,7 @@ public class PreMadeMaps
 		BufferedReader br = null;
         try 
 		{
-            br = new BufferedReader(new FileReader("testfilemap.txt"));
+            br = new BufferedReader(new FileReader(mapTextName));
             String line;
 			
             String text = br.readLine();
@@ -109,7 +119,7 @@ public class PreMadeMaps
             public void actionPerformed(ActionEvent e) 
 			{
                 JButton gridButton = PreMadeMaps.this.getGridButton(row, col);
-                System.out.println("row" + row + ",col" + col);
+                // System.out.println("row" + row + ",col" + col);
 				
 				Object source = e.getSource();
 				if ( source instanceof Component )
@@ -153,7 +163,7 @@ public class PreMadeMaps
 		BufferedReader newBufferedReader = null;
         try 
 		{
-            newBufferedReader = new BufferedReader(new FileReader("testfilemap.txt"));
+            newBufferedReader = new BufferedReader(new FileReader(mapTextName));
             String line;
 			int count = 0;
 			
@@ -224,7 +234,7 @@ public class PreMadeMaps
         mapFrame.setVisible(true);
     }
 
-    public static void main(String[] args) 
+    /*public static void main(String[] args) 
 	{
         EventQueue.invokeLater(new Runnable() 
 		{
@@ -235,5 +245,5 @@ public class PreMadeMaps
             }
         });
 		
-    }
+    }*/
 }
