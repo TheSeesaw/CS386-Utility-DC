@@ -46,20 +46,15 @@ public class MainMenu
         {
           //COCreationGUI characterCreation = new COCreationGUI();
           String[] a = {""};
-          COCreationGUI.main( a );
+          COCreationGUI co_window = new COCreationGUI(validUser);
           frame.setVisible( false );
         }
-
-        if( e.getActionCommand().equals( "Ability Creation" ) )
+		// handle map creation button
+		else if( e.getActionCommand().equals( "Map Creation" ) )
         {
-          // put the methods to call your part here
-          // validUser may be a pertinent variable( the user that is currently logged in)
-        }
-
-        if( e.getActionCommand().equals( "Map Creation" ) )
-        {
-          // put the methods to call your part here
-          // validUser may be a pertinent variable
+		  // enter the name of the text file you will load here 
+          PreMadeMaps maps_window = new PreMadeMaps("testfilemap2.txt");
+          frame.setVisible( false );
         }
       }
   }
