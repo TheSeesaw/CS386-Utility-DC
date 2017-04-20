@@ -33,6 +33,10 @@ public class NonPlayerCharacter extends CharacterObject
         return "none";
      }
   }
+  public int getLevel()
+  {
+     return this.level;
+  }
   // Setters
   public void setRace(String new_race)
   {

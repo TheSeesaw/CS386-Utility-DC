@@ -34,6 +34,7 @@ abstract class CharacterObject
       this.saves = new_saves;
    }
    //TODO: function that sets one attribute
+   //TODO: function that sets one save
    // Getters
    String getName()
    {

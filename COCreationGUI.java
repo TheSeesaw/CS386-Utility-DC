@@ -167,9 +167,17 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     base_stats.add(gen_attributes);
     // Labels for displaying saving throws
     JLabel saves_t = new JLabel("Saving Throws: \n");
-    JLabel forts_t = new JLabel("Fortitude: \n");
+    JLabel fort_t = new JLabel("Fortitude: \n");
     JLabel ref_t = new JLabel("Reflex: \n");
     JLabel will_t = new JLabel("Will: \n");
+    // Add them to the pane
+    base_stats.add(saves_t);
+    base_stats.add(fort_t);
+    base_stats.add(fort_d);
+    base_stats.add(ref_t);
+    base_stats.add(ref_d);
+    base_stats.add(will_t);
+    base_stats.add(will_d);
     //NOTE: temporary button until listener implementation is fixed
     JButton update_saves = new JButton("Update");
     update_saves.addActionListener(new ButtonListener());
@@ -220,7 +228,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
          switch (buttonActionCommand)
          {
             case "update saves":
-               // re-calculate saves and display results
+               // re-calculate saves, saving them into character object
                tools.calculateSavingThrows(test_npc);
                // Update display labels
                fort_d.setText(Integer.toString(test_npc.getSaves()[0]));
