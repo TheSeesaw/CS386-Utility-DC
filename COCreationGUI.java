@@ -260,6 +260,12 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
                // Generate a new set of ability scores
                // NOTE: classic is hard coded into the statement
                tools.generateAttributes(test_npc, "classic");
+               // Apply racial modifiers
+               // Check that the character object has been given a race
+               if (test_npc.getRace() != null)
+               {
+                  tools.applyRacialBonuses(test_npc);
+               }
                // Update the display labels
                str_d.setText(Integer.toString(test_npc.getAttributes()[0]));
                dex_d.setText(Integer.toString(test_npc.getAttributes()[1]));

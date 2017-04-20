@@ -9,6 +9,8 @@ abstract class CharacterObject
    private int[] attributes = new int[6];
    private int[] saves = new int[3];
    //public Ability[] abilities = null;
+   // Hit die defaults to lowest die, a d6
+   private int hit_die_size = 6;
    private int current_hp = 1;
    private static int total_hp = 1;
 
@@ -87,7 +89,7 @@ abstract class CharacterObject
       *  (score - 10) / 2, round up if negative
       *  both cases round toward 0, so the floor function works for both
       */
-      modifier = ab_score / 10;
+      modifier = ab_score - 10;
       if (modifier == 0 || modifier == 1)
       {
          // Score is either 10 or 11, modifier = 0

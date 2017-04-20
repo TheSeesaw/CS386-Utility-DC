@@ -23,7 +23,7 @@ public class Utilities
       return d_value;
    }
 
-   // NOTE: Only saves character objects for now
+   // NOTE: Only saves npc character objects for now
    // NOTE: Only takes in NPC objects (needs a conditional to check for object type)
    public static int saveCharacterObject(NonPlayerCharacter c_ob, String type) throws IOException
    {
@@ -37,7 +37,24 @@ public class Utilities
       String type_switch = type;
       switch(type_switch)
       {
-         case "character":
+         case "npc":
+            // Open a file to save the object to based on its name
+            file_writer = new FileWriter(target_file);
+            // Write character data to file
+            // Name
+            file_writer.write(c_ob.getName() + "\n");
+            // Description
+            file_writer.write(c_ob.getDesc() + "\n");
+            // Alignment
+            file_writer.write(c_ob.getAlign() + " ");
+            // Race
+            file_writer.write(c_ob.getRace() + " ");
+            // Class
+            file_writer.write(c_ob.getJob() + "\n");
+            // Hit dice and hitpoints
+            file_writer.close();
+            break;
+         case "pc":
             // Open a file to save the object to based on its name
             file_writer = new FileWriter(target_file);
             // Write character data to file
@@ -79,7 +96,7 @@ public class Utilities
       int con_mod = npc_ob.getABModifier("con");
       int dex_mod = npc_ob.getABModifier("dex");
       int wis_mod = npc_ob.getABModifier("wis");
-      
+
       // Get expressions based on class
       int[][] base_saves = {{0,0,1}, {1,0,0}, {0,0,0}};
       int[] new_saves;
@@ -126,6 +143,65 @@ public class Utilities
       return class_saves;
    }
 
-   // Gets saving throw values
-
+   public static int getNPCHitDie(NonPlayerCharacter npc_ob)
+   {
+      if (npc_ob.getJob() == "Adept" || npc_ob.getJob() == "Commoner")
+      {
+         return 6;
+      }
+      else if (npc_ob.getJob() == "Aristocrat" || npc_ob.getJob() == "Expert")
+      {
+         return 8;
+      }
+      else // Warrior
+      {
+         return 10;
+      }
+   }
+   // NOTE: Should also be able to take in PlayerCharacter objects, but not creature objects
+   public static void applyRacialBonuses(NonPlayerCharacter npc_ob)
+   {
+      //TODO: Implement score choice for Half-elf, Half-orc, and Human
+      int[] character_ab = npc_ob.getAttributes();
+      if (npc_ob.getRace() == "Dwarf")
+      {
+         // Add 2 to constitution and wisdom,
+         // Subract 2 from charisma
+         character_ab[2] += 2;
+         character_ab[4] += 2;
+         character_ab[5] -= 2;
+      }
+      else if (npc_ob.getRace() == "Elf")
+      {
+         // Add 2 to dexteriy and intelligence
+         // Subtract 2 from constitution
+         character_ab[1] += 2;
+         character_ab[3] += 2;
+         character_ab[2] -= 2;
+      }
+      else if (npc_ob.getRace() == "Gnome")
+      {
+         // Add 2 to constitution and charisma
+         // Subract 2 from strength
+         character_ab[2] += 2;
+         character_ab[5] += 2;
+         character_ab[0] -= 2;
+      }
+      else if (npc_ob.getRace() == "Halfling")
+      {
+         // Add 2 to dexteriy and charisma
+         // Subract 2 from strength
+         character_ab[1] += 2;
+         character_ab[5] += 2;
+         character_ab[0] -= 2;
+      }
+      else // Half-elf, Half-orc, or Human
+      {
+         // Pick a random score and add 2 to it
+         int target_score = randGenN(6);
+         character_ab[target_score] += 2;
+      }
+      // Set the new attributes
+      npc_ob.setAttributes(character_ab);
+   }
 }
