@@ -9,104 +9,128 @@ public class UserManagement
 {
   private HashSet<User> users;
   private File userFile;
-  private FileWriter writer;
 
+// initialize the user management
   public UserManagement( File userFile ) throws IOException
   {
+
     this.userFile = userFile;
     users  = new HashSet<User>();
-    userFile = new File("users.txt");
-
     addUsersFromList( userFile );
+
   }
 
   // a request for a login: return the user if successful, null if unsuccessful
   public User login( String userName, String password )
   {
+
+    // find the user with the given username
     User loginUser = getUserFromName( userName );
+
     // If the userName belongs to a user
     if( loginUser != null)
     {
+
       // if the passwords match
       if( checkPasswordCorrectness( password, loginUser ) == true )
       {
         return loginUser;
       }
+
     }
     return null;
+
   }
 
-  // add a user : u = invalid user name, p = invalid password, t = added successfully
-  public char addUser( String userName, String password )
-  {
 
+  // add a user : u = invalid user name, p = invalid password, t = added successfully
+  public char addUser( String userName, String password, boolean isFromFile )
+  {
+    // username already taken
     if( getUserFromName( userName ) != null )
     {
       return 'u';
     }
+
+    // invalid password
     if( checkPasswordValidity( password ) == false )
     {
       return 'p';
     }
 
+
     password = encrypt( password );
+    // create a new user with the provided info and add it to the user hash set
     User newUser = new User( userName, password );
     users.add( newUser );
+
+    // if this is a new user add their info to the end of the file
+    if( isFromFile == false )
+    {
+      updateFile( newUser );
+    }
 
     return 't';
   }
 
-// update the text file with the new users: just a placeholder right now
-  public void updateFile( File userFile )
-  {/*
+
+
+// update the text file with the new users
+  public void updateFile( User user )
+  {
 
     try
     {
 
+      FileOutputStream fos = new FileOutputStream( userFile, true );
 
-       // Writes the users to the file
-       User currentUser;
-       Iterator<User> iterator = users.iterator();
-       String userString = "";
+	    BufferedWriter bw = new BufferedWriter( new OutputStreamWriter( fos ) );
 
-       while( iterator.hasNext() )
-       {
-         currentUser = iterator.next();
-         userString += "" + currentUser.getUserName() + ", " + currentUser.getPassword() + "\n";
-         //System.out.println( userString );
-       }
-       writer.write( userString );
-       writer.flush();
-       writer.close();
+      String userString = "" + user.getUserName() + ", " + user.getPassword();
+      bw.write( userString );
+      bw.newLine();
+
+	    bw.close();
+
+
     }
-    catch (IOException e)
+    catch(IOException e)
     {
 
-    }*/
+    }
+
   }
+
 
 
 // given a txt file of existing users add them to the hashset
   private void addUsersFromList( File userFile ) throws IOException
   {
+
     Scanner inputScanner = new Scanner( userFile );
     String currentUserString;
+
+    // go through the file line by line creating new users for each line
     while( inputScanner.hasNext()==true)
     {
       currentUserString = inputScanner.nextLine();
       createUserFromString( currentUserString );
     }
+
   }
 
 
-
+// given a sring of user data, convert it to a user
   private void createUserFromString( String userString )
   {
+
     User newUser;
     StringBuilder modifiedString = new StringBuilder( userString );
     String userName = "";
     String password = "";
     boolean isUserName = true;
+    // everything before the ',' is the username
+    // everything after the ',' is the password
     for( int i=0; i<userString.length(); i++)
     {
       if( modifiedString.charAt( i ) == ',' )
@@ -123,8 +147,12 @@ public class UserManagement
         password += modifiedString.charAt( i );
       }
     }
+    // remove the whitespace
+    userName = userName.replace(" ", "");
     password = password.replace(" ", "");
-    addUser( userName, password );
+
+    // add the user
+    addUser( userName, password, true );
   }
 
 
@@ -153,9 +181,12 @@ public class UserManagement
     }
   }
 
+
+
 // compare the given password to the password for a user
   private boolean checkPasswordCorrectness( String givenPassword, User givenUser )
   {
+
     String actualPassword = givenUser.getPassword();
     // user passwords are encrypted so you must decrypt them
     actualPassword = decrypt(actualPassword);
@@ -167,25 +198,37 @@ public class UserManagement
     {
       return false;
     }
+
   }
+
+
 
 // given a username return the user that belongs to that name, null if it doesnt exist
   private User getUserFromName( String userName )
   {
+
     User currentUser;
     User foundUser = null;
     Iterator<User> userIterator = users.iterator();
+
+    // iterate through the list comparing the given username against all usernames
     while( userIterator.hasNext() )
     {
+
       currentUser = userIterator.next();
+      // when you find a match return the user
       if( currentUser.getUserName().compareTo( userName ) == 0 )
       {
+
         foundUser = currentUser;
         return foundUser;
+
       }
+
     }
+    // if no users were found this will return null
     return foundUser;
-  //  return null;
   }
+
 
 }

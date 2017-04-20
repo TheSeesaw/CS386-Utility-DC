@@ -96,7 +96,7 @@ public class AccountCreationScreen
           if( password.compareTo( confirmPasswordField.getText() ) == 0 )
           {
 
-            char checkPasswordCorrectness = users.addUser( userNameField.getText(), passwordField.getText() );
+            char checkPasswordCorrectness = users.addUser( userNameField.getText(), passwordField.getText(), false );
             // error
             if( checkPasswordCorrectness == 'u' )
             {
