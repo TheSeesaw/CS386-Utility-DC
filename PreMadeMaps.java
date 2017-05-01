@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
@@ -29,9 +30,12 @@ public class PreMadeMaps
 	private int fileColumns;
     private final List<JButton> buttonList = new ArrayList<JButton>();
 	
+	private int turnNumber;
+	
 	// initialize the Map using the entered text file
 	public PreMadeMaps(String mapTextName)
 	{
+		turnNumber = 1;
 		this.mapTextName = mapTextName;
 		display();
 	}
@@ -124,13 +128,49 @@ public class PreMadeMaps
 				Object source = e.getSource();
 				if ( source instanceof Component )
 				{
-					if ( ((Component)source).getBackground() == Color.GREEN )
+					if ( turnNumber == 1 )
+					{
+						if ( ((Component)source).getBackground() == Color.GREEN )
+						{
+							((Component)source).setBackground( Color.WHITE );
+						}
+						else
+						{
+							((Component)source).setBackground( Color.GREEN );
+						}
+					}
+					else if ( turnNumber == 2 )
+					{
+						if ( ((Component)source).getBackground() == Color.RED )
 					{
 						((Component)source).setBackground( Color.WHITE );
 					}
-					else
+						else
+						{
+							((Component)source).setBackground( Color.RED );
+						}
+					}
+					else if ( turnNumber == 3 )
 					{
-						((Component)source).setBackground( Color.GREEN );
+						if ( ((Component)source).getBackground() == Color.BLUE )
+						{
+							((Component)source).setBackground( Color.WHITE );
+						}
+						else
+						{
+							((Component)source).setBackground( Color.BLUE );
+						}
+					}
+					else 
+					{
+						if ( ((Component)source).getBackground() == Color.ORANGE )
+						{
+							((Component)source).setBackground( Color.WHITE );
+						}
+						else
+						{
+							((Component)source).setBackground( Color.ORANGE );
+						}
 					}
 				}
             }
@@ -215,6 +255,7 @@ public class PreMadeMaps
             }
 		}
 		
+		
         return mapPanel;
     }
 
@@ -228,7 +269,75 @@ public class PreMadeMaps
 		// create the frame 
         JFrame mapFrame = new JFrame("Dungeons and Dragons Map");
         mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mapFrame.add(createGridPanel());
+		
+		// create the big panel that will hold the grid and the turn buttons
+		JPanel MAINPANEL = new JPanel(new GridLayout(2,1));
+        MAINPANEL.add(createGridPanel());
+		
+		// create the changeTurn panel that will hold the change turn button and the counter
+		JPanel changeTurn = new JPanel(new FlowLayout());
+		JButton changeTurnButton = new JButton("Change Turn");
+		
+		// set the shape of the counter 
+		JButton currentTurn = new JButton("Player 1's Turn");
+		currentTurn.setEnabled(false);
+		Border line2 = new LineBorder( Color.BLACK );
+		Border margin2 = new EmptyBorder( 10, 10, 50, 50 );
+		Border compound2 = new CompoundBorder( line2, margin2 );
+		currentTurn.setBorder( compound2 );
+		currentTurn.setBackground( Color.WHITE );
+		
+		// add an action listener to the change turn button
+		changeTurnButton.addActionListener(new ActionListener() 
+		{
+            @Override
+            public void actionPerformed(ActionEvent e) 
+			{
+				Object source = e.getSource();
+				if ( source instanceof Component )
+				{
+					// first players turn
+					if ( turnNumber == 1 )
+					{
+						turnNumber++;
+						currentTurn.setText("Player 2's Turn");
+					}
+					// second players turn
+					else if ( turnNumber == 2 )
+					{
+						turnNumber++;
+						currentTurn.setText("Player 3's Turn");
+					}
+					// third players turn
+					else if ( turnNumber == 3 )
+					{
+						turnNumber++;
+						currentTurn.setText("Player 4's Turn");
+					}
+					// fourth players turn
+					else
+					{
+						turnNumber = 1;
+						currentTurn.setText("Player 1's Turn");
+					}
+				}
+            }
+        });
+		
+		// set the shape of the change turn button
+		Border line1 = new LineBorder( Color.BLACK );
+		Border margin1 = new EmptyBorder( 50, 50, 10, 10 );
+		Border compound1 = new CompoundBorder( line1, margin1 );
+		changeTurnButton.setBorder( compound1 );
+		changeTurnButton.setBackground( Color.WHITE );
+		changeTurn.add(changeTurnButton);
+		
+		changeTurn.add(currentTurn);
+		
+		// add the change turn panel to the big panel panel
+		MAINPANEL.add(changeTurn);
+		// add the big main panel to the frame
+		mapFrame.add(MAINPANEL);
         mapFrame.pack();
         mapFrame.setLocationRelativeTo(null);
         mapFrame.setVisible(true);
