@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -142,9 +143,9 @@ public class PreMadeMaps
 					else if ( turnNumber == 2 )
 					{
 						if ( ((Component)source).getBackground() == Color.RED )
-					{
-						((Component)source).setBackground( Color.WHITE );
-					}
+						{
+							((Component)source).setBackground( Color.WHITE );
+						}
 						else
 						{
 							((Component)source).setBackground( Color.RED );
@@ -271,7 +272,7 @@ public class PreMadeMaps
         mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// create the big panel that will hold the grid and the turn buttons
-		JPanel MAINPANEL = new JPanel(new GridLayout(2,1));
+		JPanel MAINPANEL = new JPanel(new FlowLayout());
         MAINPANEL.add(createGridPanel());
 		
 		// create the changeTurn panel that will hold the change turn button and the counter
@@ -282,7 +283,8 @@ public class PreMadeMaps
 		JButton currentTurn = new JButton("Player 1's Turn");
 		currentTurn.setEnabled(false);
 		Border line2 = new LineBorder( Color.BLACK );
-		Border margin2 = new EmptyBorder( 10, 10, 50, 50 );
+		// EmptyBorder(made it a square text on bottom,made it a long rectangle text on right,made it a square text on top,made it a flat rectangle text on left)
+		Border margin2 = new EmptyBorder( 5, 5, 5, 30 );
 		Border compound2 = new CompoundBorder( line2, margin2 );
 		currentTurn.setBorder( compound2 );
 		currentTurn.setBackground( Color.WHITE );
@@ -326,10 +328,11 @@ public class PreMadeMaps
 		
 		// set the shape of the change turn button
 		Border line1 = new LineBorder( Color.BLACK );
-		Border margin1 = new EmptyBorder( 50, 50, 10, 10 );
+		Border margin1 = new EmptyBorder( 30, 30, 30, 30 );
 		Border compound1 = new CompoundBorder( line1, margin1 );
 		changeTurnButton.setBorder( compound1 );
 		changeTurnButton.setBackground( Color.WHITE );
+		changeTurnButton.setFont(new Font("Arial", Font.PLAIN, 20));
 		changeTurn.add(changeTurnButton);
 		
 		changeTurn.add(currentTurn);
