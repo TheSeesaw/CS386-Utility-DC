@@ -7,6 +7,7 @@ public class AccountCreationScreen
   private JFrame frame;
   private UserManagement users;
   private JPanel panel1;
+  private JPanel panel2;
   private JPanel messagePanel;
   private JPanel userNamePanel;
   private JPanel emailPanel;
@@ -22,13 +23,15 @@ public class AccountCreationScreen
   private JTextField passwordField;
   private JTextField confirmPasswordField;
   private JButton submitButton;
+  private JButton returnButton;
 
   public AccountCreationScreen(UserManagement users)
   {
     this.users = users;
     frame = new JFrame( "User Creation Screen" );
     panel1 = new JPanel();
-    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    panel2 = new JPanel();
+    frame.setDefaultCloseOperation( JFrame.HIDE_ON_CLOSE );
     panel1.setLayout( new BoxLayout( panel1, BoxLayout.PAGE_AXIS ) );
 
     // message panel
@@ -73,10 +76,15 @@ public class AccountCreationScreen
 
     // submit button
     submitButton = new JButton( "Submit" );
-    panel1.add( submitButton );
+    panel2.add( submitButton );
     submitButton.addActionListener( new ButtonListener() );
 
+    // return Button
+    returnButton = new JButton( "Return to Login" );
+    panel2.add( returnButton );
+    returnButton.addActionListener( new ButtonListener() );
 
+    panel1.add( panel2 );
 
     frame.getContentPane().add( panel1 );
 		frame.pack();
@@ -122,6 +130,12 @@ public class AccountCreationScreen
           }
           messagePanel.setVisible( true );
           frame.pack();
+        }
+
+        else if ( e.getActionCommand().equals( "Return to Login" ) )
+        {
+          frame.setVisible( false );
+          frame.dispose();
         }
       }
     }
