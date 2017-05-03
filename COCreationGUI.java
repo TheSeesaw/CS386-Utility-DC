@@ -10,8 +10,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   String[] alignment_array = {"LG", "NG", "CG", "LN", "N", "CN", "LE", "NE", "CE"};
   String[] race_array = {"Dwarf", "Elf", "Gnome", "Half-Elf", "Half-Orc", "Halfling", "Human"};
   String[] npc_job_array = {"Adept", "Aristocrat", "Commoner", "Expert", "Warrior"};
-  // Tools object, allows access to methods in Utilities
-  Utilities tools = new Utilities();
+
   // Save button
   JButton save = new JButton("Save Changes");
   // Back button
@@ -26,7 +25,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   String co_name = "";
   JTextField co_desc_field = new JTextField("Enter a description here", 40);
   String co_desc = "";
-  // --DEVELOPMENT--
+
   // NPC object
   NonPlayerCharacter test_npc = new NonPlayerCharacter();
 
@@ -47,6 +46,90 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   JLabel fort_d = new JLabel();
   JLabel ref_d = new JLabel();
   JLabel will_d = new JLabel();
+
+  // Combat stats display variables
+  JLabel t_hp_d = new JLabel();
+  JLabel b_ac_d = new JLabel();
+  JLabel ff_ac_d = new JLabel();
+  JLabel t_ac_d = new JLabel();
+  JLabel init_d = new JLabel();
+  JLabel speed_d = new JLabel();
+  // TODO: Add labels for different movement types
+  JLabel bab_d = new JLabel();
+  JLabel cmb_d = new JLabel();
+  JLabel cmd_d = new JLabel();
+  // TODO: Support a nondeterministic number of attacks
+  JLabel p_att_d = new JLabel();
+  JLabel s_att_d = new JLabel();
+
+  // Skills display variables
+  JLabel acrobatics_d = new JLabel();
+  JLabel appraise_d = new JLabel();
+  JLabel bluff_d = new JLabel();
+  JLabel climb_d = new JLabel();
+  // TODO: Support multiple craft skills
+  JLabel craft_d = new JLabel();
+  JLabel diplomacy_d = new JLabel();
+  JLabel disabledevice_d = new JLabel();
+  JLabel disguise_d = new JLabel();
+  JLabel escapeartist_d = new JLabel();
+  JLabel fly_d = new JLabel();
+  JLabel handleanimal_d = new JLabel();
+  JLabel heal_d = new JLabel();
+  JLabel intimidate_d = new JLabel();
+  JLabel arcana_d = new JLabel();
+  JLabel dungeoneering_d = new JLabel();
+  JLabel engineering_d = new JLabel();
+  JLabel geography_d = new JLabel();
+  JLabel history_d = new JLabel();
+  JLabel local_d = new JLabel();
+  JLabel nature_d = new JLabel();
+  JLabel nobility_d = new JLabel();
+  JLabel planes_d = new JLabel();
+  JLabel religion_d = new JLabel();
+  JLabel linguistics_d = new JLabel();
+  JLabel perception_d = new JLabel();
+  // TODO: support multiple perform skills
+  JLabel perform_d = new JLabel();
+  // TODO: support multiple profession skills
+  JLabel profession_d = new JLabel();
+  JLabel ride_d = new JLabel();
+  JLabel sensemotive_d = new JLabel();
+  JLabel sleightofhand_d = new JLabel();
+  JLabel spellcraft_d = new JLabel();
+  JLabel stealth_d = new JLabel();
+  JLabel survival_d = new JLabel();
+  JLabel swim_d = new JLabel();
+  JLabel usemagicdevice_d = new JLabel();
+  // TODO: support custom skills
+
+  // Feats Display Label
+  JLabel feats_d = new JLabel();
+
+  // Gear display labels
+  JLabel weapon1_d = new JLabel();
+  JLabel weapon2_d = new JLabel();
+  JLabel armor_d = new JLabel();
+  JLabel belt_d = new JLabel();
+  JLabel body_d = new JLabel();
+  JLabel chest_d = new JLabel();
+  JLabel eyes_d = new JLabel();
+  JLabel feet_d = new JLabel();
+  JLabel hand_d = new JLabel();
+  JLabel head_d = new JLabel();
+  JLabel headband_d = new JLabel();
+  JLabel neck_d = new JLabel();
+  JLabel ring1_d = new JLabel();
+  JLabel ring2_d = new JLabel();
+  JLabel shield_d = new JLabel();
+  JLabel shoulder_d = new JLabel();
+  JLabel wrist_d = new JLabel();
+  // TODO: slotless items
+
+  // Item display label
+  JLabel items_d = new JLabel();
+
+  // TODO: abilities and spells
 
   // Card labels for the layout with description of contents
   // Character fluff details, also includes race and class
@@ -72,6 +155,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     JPanel base_stats = new JPanel();
     base_stats.setLayout(new BoxLayout(base_stats, BoxLayout.PAGE_AXIS));
     JPanel combat_stats = new JPanel();
+    combat_stats.setLayout(new BoxLayout(combat_stats, BoxLayout.PAGE_AXIS));
     JPanel skills_feats = new JPanel();
     JPanel gear_items = new JPanel();
     JPanel spells_abilities = new JPanel();
@@ -184,7 +268,101 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     update_saves.setActionCommand("update saves");
     base_stats.add(update_saves);
 
+    // Combat Stats ============================================================
 
+    // Combat stats title labels
+    JLabel t_hp_t = new JLabel("Total HP: ");
+    combat_stats.add(t_hp_t);
+    combat_stats.add(t_hp_d);
+    JButton reroll_hitpoints = new JButton("Reroll Hitpoints");
+    reroll_hitpoints.addActionListener(new ButtonListener());
+    reroll_hitpoints.setActionCommand("reroll hitpoints");
+    combat_stats.add(reroll_hitpoints);
+    JLabel b_ac_t = new JLabel("AC: ");
+    combat_stats.add(b_ac_t);
+    combat_stats.add(b_ac_d);
+    JLabel ff_ac_t = new JLabel("Flat Footed AC: ");
+    combat_stats.add(ff_ac_t);
+    combat_stats.add(ff_ac_d);
+    JLabel t_ac_t = new JLabel("Touch AC: ");
+    combat_stats.add(t_ac_t);
+    combat_stats.add(t_ac_d);
+    JLabel init_t = new JLabel("Initiative: ");
+    combat_stats.add(init_t);
+    combat_stats.add(init_d);
+    JLabel speed_t = new JLabel("Speed (feet): ");
+    combat_stats.add(speed_t);
+    combat_stats.add(speed_d);
+    // TODO: Add labels for different movement types
+    JLabel bab_t = new JLabel("Base Attack Bonus: ");
+    combat_stats.add(speed_t);
+    combat_stats.add(speed_d);
+    JLabel cmb_t = new JLabel("Combat Maneuver Bonus: ");
+    combat_stats.add(cmb_t);
+    combat_stats.add(cmb_d);
+    JLabel cmd_t = new JLabel("Combat Maneuver Defense: ");
+    combat_stats.add(cmd_t);
+    combat_stats.add(cmd_d);
+    // TODO: Support a nondeterministic number of attacks
+    JLabel p_att_t = new JLabel("Primary Attack: ");
+    combat_stats.add(p_att_t);
+    combat_stats.add(p_att_d);
+    JLabel s_att_t = new JLabel("Secondary Attack: ");
+    combat_stats.add(s_att_t);
+    combat_stats.add(s_att_d);
+    JButton update_combat_stats = new JButton("Update");
+    update_combat_stats.addActionListener(new ButtonListener());
+    update_combat_stats.setActionCommand("update combat stats");
+    combat_stats.add(update_combat_stats);
+
+    // Skills and Feats ========================================================
+
+    JLabel acrobatics_t = new JLabel("\nAcrobatics: ");
+    JLabel appraise_t = new JLabel("\nAppraise: ");
+    JLabel bluff_t = new JLabel("\nBluff: ");
+    JLabel climb_t = new JLabel("\nClimb: ");
+    // TODO: Support multiple craft skills
+    JLabel craft_t = new JLabel("\nCraft: ");
+    JLabel diplomacy_t = new JLabel("\nDiplomacy: ");
+    JLabel disabledevice_ = new JLabel("\nDisable Device: ");
+    JLabel disguise_t = new JLabel("\nDisguise: ");
+    JLabel escapeartist_t = new JLabel("\nEscape Artist: ");
+    JLabel fly_t = new JLabel("\nFly: ");
+    JLabel handleanimal_t = new JLabel("\nHandle Animal: ");
+    JLabel heal_t = new JLabel("\nHeal: ");
+    JLabel intimidate_t = new JLabel("\nIntimidate: ");
+    JLabel arcana_t = new JLabel("\nKnowledge(): ");
+    JLabel dungeoneering_t = new JLabel("\nKnowledge(arcana): ");
+    JLabel engineering_t = new JLabel("\nKnowledge(engineering): ");
+    JLabel geography_t = new JLabel("\nKnowledge(geography): ");
+    JLabel history_t = new JLabel("\nKnowledge(history): ");
+    JLabel local_t = new JLabel("\nKnowledge(local): ");
+    JLabel nature_t = new JLabel("\nKnowledge(nature): ");
+    JLabel nobility_t = new JLabel("\nKnowledge(nobility): ");
+    JLabel planes_t = new JLabel("\nKnowledge(planes): ");
+    JLabel religion_t = new JLabel("\nKnowledge(religion): ");
+    JLabel linguistics_t = new JLabel("\nLinguistics: ");
+    JLabel perception_t = new JLabel("\nPerception: ");
+    // TODO: support multiple perform skills
+    JLabel perform_t = new JLabel("\nPerform: ");
+    // TODO: support multiple profession skills
+    JLabel profession_t = new JLabel("\nProfession: ");
+    JLabel ride_t = new JLabel("\nRide: ");
+    JLabel sensemotive_t = new JLabel("\nSense Motive: ");
+    JLabel sleightofhand_t = new JLabel("\nSleight of Hand: ");
+    JLabel spellcraft_t = new JLabel("\nSpellcraft: ");
+    JLabel stealth_t = new JLabel("\nStealth: ");
+    JLabel survival_t = new JLabel("\nSurvival: ");
+    JLabel swim_t = new JLabel("\nSwim: ");
+    JLabel usemagicdevice_t = new JLabel("\nUse Magic Device: ");
+    // TODO: support custom skills
+
+    // Feats Display Label
+    JLabel feats_t = new JLabel("\nFeats: \n");
+
+    // Items and Gear ==========================================================
+
+    // Spells and Abilities ====================================================
 
     // Add the panel to the pane
     co_tabs.addTab(DETAILSPANEL, details);
@@ -227,9 +405,29 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
          //TODO: a listener for when job or attributes change that automatically calls calculateSavingThrows()
          switch (buttonActionCommand)
          {
+            case "reroll hitpoints":
+               // re-roll hitpoints
+               break;
+            case "update combat stats":
+               // re-calculate attack bonuses, AC's, CMB, CMD
+               Utilities.calculateAC(test_npc);
+               b_ac_d.setText(Integer.toString(test_npc.getAC()[0]));
+               ff_ac_d.setText(Integer.toString(test_npc.getAC()[1]));
+               t_ac_d.setText(Integer.toString(test_npc.getAC()[2]));
+               init_d.setText(Integer.toString(test_npc.getInitiative()));
+               speed_d.setText(Integer.toString(test_npc.getSpeed()));
+               Utilities.calculateBAB(test_npc);
+               bab_d.setText(Integer.toString(test_npc.getBAB()));
+               cmb_d.setText(Integer.toString(test_npc.getCMB()));
+               cmd_d.setText(Integer.toString(test_npc.getCMD()));
+               // Calculate primary attack
+               p_att_d.setText(Utilities.convertAttackValue(test_npc, 0));
+               // Calculate secondary attack
+               s_att_d.setText(Utilities.convertAttackValue(test_npc, 1));
+               break;
             case "update saves":
                // re-calculate saves, saving them into character object
-               tools.calculateSavingThrows(test_npc);
+               Utilities.calculateSavingThrows(test_npc);
                // Update display labels
                fort_d.setText(Integer.toString(test_npc.getSaves()[0]));
                ref_d.setText(Integer.toString(test_npc.getSaves()[1]));
@@ -259,12 +457,12 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
             case "stats gen":
                // Generate a new set of ability scores
                // NOTE: classic is hard coded into the statement
-               tools.generateAttributes(test_npc, "classic");
+               Utilities.generateAttributes(test_npc, "classic");
                // Apply racial modifiers
                // Check that the character object has been given a race
                if (test_npc.getRace() != null)
                {
-                  tools.applyRacialBonuses(test_npc);
+                  Utilities.applyRacialBonuses(test_npc);
                }
                // Update the display labels
                str_d.setText(Integer.toString(test_npc.getAttributes()[0]));
@@ -285,7 +483,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
                test_npc.setDesc(co_desc_field.getText());
                try
                {
-                  int error_code = tools.saveCharacterObject(test_npc, "character");
+                  int error_code = Utilities.saveCharacterObject(test_npc, "character");
                }
                catch(IOException ioe)
                {
@@ -303,126 +501,3 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
      }
    }
 }
-
-/*
-// Taken from TabDemo.java
-public static void main(String[] args) {
-    //Schedule a job for the event dispatch thread:
-    //creating and showing this application's GUI.
-    javax.swing.SwingUtilities.invokeLater(new Runnable()
-    {
-        public void run()
-        {
-            createAndShowGUI();
-        }
-    }
-    );
-}
-*/
-
-
-
- /*
-
-
- // Create matching JPanels for each of the labels
-
- JPanel base_stats = new JPanel();
- JPanel combat_stats = new JPanel();
- JPanel skills_feats = new JPanel();
- JPanel gear_items = new JPanel();
- JPanel spells_abilities = new JPanel();
-
- // Button Begins character creation, will be removed when linked with menu program
- Button create_new;
- // Button stops creation, and saves all relevant data to a text file before closing the program
- Button save;
- // Test label to let the user know what they need to enter next
- // Initialized with no text, text is updated through creation
- JLabel status_label = new JLabel();
- // Create a new window, set size, make it visible
- public static void main(String[] args)
- {
-    COCreationGUI new_co_window = new COCreationGUI("Create New Character Object");
-    new_co_window.setSize(1000, 600);
-    new_co_window.setVisible(true);
- }
- // This is mostly copied from tutorial @ https://docs.oracle.com/javase/tutorial/uiswing/events/actionlistener.html
- public COCreationGUI(String title)
- {
-    // Set the title of the super panel
-    super(title);
-    // Initialize the panel that holds the cards
-    cards = new JPanel(new CardLayout());
-    // Add the tabs to the cards panel
-    cards.add(details, DETAILSPANEL);
-    cards.add(base_stats, BASESTATS);
-    cards.add(combat_stats, COMBATSTATS);
-    cards.add(skills_feats, SKILLSFEATS);
-    cards.add(gear_items, GEARITEMS);
-    cards.add(spells_abilities, SPELLSABILITIES);
-    // TESTING COPIED FROM JAVA tutorial
-    JPanel comboBoxPane = new JPanel(); // flow layout
-    String comboBoxItems[] = {DETAILSPANEL, BASESTATS, COMBATSTATS, SKILLSFEATS, GEARITEMS, SPELLSABILITIES};
-    JComboBox cb = new JComboBox(comboBoxItems);
-    cb.setEditable(false);
-    cb.addItemListener(this);
-    comboBoxPane.add(cb);
-    add(comboBoxPane, BorderLayout.PAGE_START);
-    add(cards, BorderLayout.CENTER);
-    // Configures layout for superpanel
-    //setLayout();
-    addWindowListener(this);
-    create_new = new Button("Create New Character Object");
-    save = new Button("Save");
-    add(create_new);
-    add(save);
-    add(status_label);
-    create_new.addActionListener(this);
-    // Set the command for the create new Button
-    create_new.setActionCommand("create");
-    save.addActionListener(this);
-    save.setActionCommand("save");
-
- }
-
- // I'm guessing this is an abstract method defined in one of the implemented classes
- public void actionPerformed(ActionEvent a_event)
- {
-    String buttonActionCommand = a_event.getActionCommand();
-    switch (buttonActionCommand)
-    {
-       case "create":
-          // Create a text box to enter the name of the new character object
-          status_label.setText("Please Enter a the Character's name");
-          break;
-       case "save":
-           Call a helper function that opens a new file,
-             writes the current character info string to it,
-             then closes the file.
-
-          break;
-    }
-
- }
- public void itemStateChanged(ItemEvent evt)
- {
-    CardLayout cl = (CardLayout)(cards.getLayout());
-    cl.show(cards, (String)evt.getItem());
- }
- // Same for this one, except more specific
- public void windowClosing(WindowEvent w_event)
- {
-    this.dispose();
- }
- // I'm guessing these are more of the abstract methods that need to be implemented somehow to be valid
- public void windowOpened(WindowEvent a_event) {}
- public void windowActivated(WindowEvent a_event) {}
- public void windowIconified(WindowEvent a_event) {}
- public void windowDeiconified(WindowEvent a_event) {}
- public void windowDeactivated(WindowEvent a_event) {}
- public void windowClosed(WindowEvent a_event)
- {
-    System.exit(0);
- }
- */

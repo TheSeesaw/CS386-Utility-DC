@@ -6,13 +6,21 @@ abstract class CharacterObject
    private String description = "";
    private String alignment = "N";
    private boolean is_alive = true;
+   private String creature_size = "Medium";
    private int[] attributes = new int[6];
    private int[] saves = new int[3];
    //public Ability[] abilities = null;
    // Hit die defaults to lowest die, a d6
    private int hit_die_size = 6;
-   private int current_hp = 1;
-   private static int total_hp = 1;
+   private static int current_hp = 1;
+   private int total_hp = 1;
+   private int init_base = 0;
+   private int speed = 30;
+   // AC values are held as integer values: [base AC, flat-footed, touch]
+   private int[] ac_values = new int[3];
+   private int bab = 0;
+   // NOTE: only two attack signatures are supported
+   private int[][] attacks = new int[2][8];
 
    // Setters
    void setName(String a_name)
@@ -34,6 +42,37 @@ abstract class CharacterObject
    void setSaves(int[] new_saves)
    {
       this.saves = new_saves;
+   }
+   void setInitiativeBase(int init_bonus)
+   {
+      this.init_base = init_bonus;
+   }
+   void setSpeed(int new_speed)
+   {
+      this.speed = new_speed;
+   }
+   void setAC(int[] new_ac)
+   {
+      this.ac_values = new_ac;
+   }
+   void setCreatureSize(String new_size)
+   {
+      if (new_size.equals("large"))
+      {
+         this.creature_size = "large";
+      }
+      else if (new_size.equals("small"))
+      {
+         this.creature_size = "small";
+      }
+      else // Set to default, medium
+      {
+         this.creature_size = "medium";
+      }
+   }
+   void setBAB(int new_bab)
+   {
+      this.bab = new_bab;
    }
    //TODO: function that sets one attribute
    //TODO: function that sets one save
@@ -101,6 +140,52 @@ abstract class CharacterObject
          modifier = (int)Math.floor(modifier / 2);
       }
       return (int)modifier;
+   }
+   int[] getAC()
+   {
+      return this.ac_values;
+   }
+   String getCreatureSize()
+   {
+      return this.creature_size;
+   }
+   int getBAB()
+   {
+      return this.bab;
+   }
+   int getInitiative()
+   {
+      return this.init_base + this.getABModifier("dex");
+   }
+   int getSpeed()
+   {
+      return this.speed;
+   }
+   int getCMB()
+   {
+      int size_mod = 0;
+      if (this.creature_size.equals("small"))
+      {
+         size_mod = -1;
+      }
+      else if (this.creature_size.equals("large"))
+      {
+         size_mod = 1;
+      }
+      return this.getABModifier("str") + size_mod + this.bab;
+   }
+   int getCMD()
+   {
+      int size_mod = 0;
+      if (this.creature_size.equals("small"))
+      {
+         size_mod = -1;
+      }
+      else if (this.creature_size.equals("large"))
+      {
+         size_mod = 1;
+      }
+      return 10 + this.getABModifier("dex") + this.getABModifier("str") + size_mod + this.bab;
    }
    // Toggles whether a character object is alive or not
    abstract void toggleAlive();

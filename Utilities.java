@@ -143,6 +143,7 @@ public class Utilities
       return class_saves;
    }
 
+   // Sets character hit die size value based on class
    public static int getNPCHitDie(NonPlayerCharacter npc_ob)
    {
       if (npc_ob.getJob() == "Adept" || npc_ob.getJob() == "Commoner")
@@ -158,6 +159,8 @@ public class Utilities
          return 10;
       }
    }
+
+
    // NOTE: Should also be able to take in PlayerCharacter objects, but not creature objects
    public static void applyRacialBonuses(NonPlayerCharacter npc_ob)
    {
@@ -170,6 +173,8 @@ public class Utilities
          character_ab[2] += 2;
          character_ab[4] += 2;
          character_ab[5] -= 2;
+         // Update speed
+         npc_ob.setSpeed(20);
       }
       else if (npc_ob.getRace() == "Elf")
       {
@@ -186,6 +191,10 @@ public class Utilities
          character_ab[2] += 2;
          character_ab[5] += 2;
          character_ab[0] -= 2;
+         // Change size
+         npc_ob.setCreatureSize("small");
+         // Update speed
+         npc_ob.setSpeed(20);
       }
       else if (npc_ob.getRace() == "Halfling")
       {
@@ -194,6 +203,10 @@ public class Utilities
          character_ab[1] += 2;
          character_ab[5] += 2;
          character_ab[0] -= 2;
+         // Change size
+         npc_ob.setCreatureSize("small");
+         // Update speed
+         npc_ob.setSpeed(20);
       }
       else // Half-elf, Half-orc, or Human
       {
@@ -203,5 +216,64 @@ public class Utilities
       }
       // Set the new attributes
       npc_ob.setAttributes(character_ab);
+   }
+
+   // Re-calculates Armor class values
+   public static void calculateAC(NonPlayerCharacter npc_ob)
+   {
+      //NOTE: This function calculates AC based on dex and size only
+      int b_ac = 10;
+      int ff_ac = 10;
+      int t_ac = 10;
+      // Apply size bonus
+      String sz = npc_ob.getCreatureSize();
+      if (sz.equals("large"))
+      {
+         b_ac--;
+         ff_ac--;
+         t_ac--;
+      }
+      else if (sz.equals("small"))
+      {
+         b_ac++;
+         ff_ac++;
+         t_ac++;
+      }
+      int dex_bonus = npc_ob.getABModifier("dex");
+      // Apply dex bonus
+      b_ac += dex_bonus;
+      t_ac += dex_bonus;
+      //TODO: Take gear into account
+      int[] final_ac = new int[3];
+      final_ac[0] = b_ac;
+      final_ac[1] = ff_ac;
+      final_ac[2] = t_ac;
+      npc_ob.setAC(final_ac);
+   }
+
+   // Calculate a base attack bonus based on class
+   public static void calculateBAB(NonPlayerCharacter npc_ob)
+   {
+      float bab = 0;
+      if (npc_ob.getJob() == "Adept" || npc_ob.getJob() == "Commoner")
+      {
+         bab = (int)Math.floor(npc_ob.getLevel() * 0.5);
+         npc_ob.setBAB((int)bab);
+      }
+      else if (npc_ob.getJob() == "Aristocrat" || npc_ob.getJob() == "Expert")
+      {
+         bab = (int)Math.floor(npc_ob.getLevel() * 0.75);
+         npc_ob.setBAB((int)bab);
+      }
+      else // Warrior
+      {
+         bab = npc_ob.getLevel();
+         npc_ob.setBAB((int)bab);
+      }
+   }
+   // Return a string representation of an attack value
+   public static String convertAttackValue(NonPlayerCharacter npc_ob, int attack_index)
+   {
+      return "";
    }
 }
