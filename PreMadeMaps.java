@@ -22,17 +22,17 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-public class PreMadeMaps 
+public class PreMadeMaps
 {
 	// holds the name of the text file entered in MainMenu.java
 	private String mapTextName;
-	
+
 	private int fileRows;
 	private int fileColumns;
     private final List<JButton> buttonList = new ArrayList<JButton>();
-	
+
 	private int turnNumber;
-	
+
 	// initialize the Map using the entered text file
 	public PreMadeMaps(String mapTextName)
 	{
@@ -40,92 +40,92 @@ public class PreMadeMaps
 		this.mapTextName = mapTextName;
 		display();
 	}
-	
+
 	// get the amount of rows from the text file
 	public void readTextFileRows()
 	{
 		BufferedReader br = null;
-        try 
+        try
 		{
             br = new BufferedReader( new FileReader(mapTextName) );
             String line;
-			
-            while ( ( line = br.readLine() ) != null ) 
+
+            while ( ( line = br.readLine() ) != null )
 			{
 				fileRows++;
             }
-        } 
-		catch ( IOException e ) 
+        }
+		catch ( IOException e )
 		{
             e.printStackTrace();
-        } 
-		finally 
+        }
+		finally
 		{
-            try 
+            try
 			{
-                if ( br != null ) 
+                if ( br != null )
 				{
                     br.close();
                 }
-            } 
-			catch (IOException ex) 
+            }
+			catch (IOException ex)
 			{
                 ex.printStackTrace();
             }
 		}
 	}
-	
+
 	// get the amount of columns from the text file
 	public void readTextFileColumns()
 	{
 		BufferedReader br = null;
-        try 
+        try
 		{
             br = new BufferedReader(new FileReader(mapTextName));
             String line;
-			
+
             String text = br.readLine();
 			fileColumns = text.length();
-        } 
-		catch (IOException e) 
+        }
+		catch (IOException e)
 		{
             e.printStackTrace();
-        } 
-		finally 
+        }
+		finally
 		{
-            try 
+            try
 			{
-                if (br != null) 
+                if (br != null)
 				{
                     br.close();
                 }
-            } 
-			catch (IOException ex) 
+            }
+			catch (IOException ex)
 			{
                 ex.printStackTrace();
             }
 		}
 	}
-	
+
 	// return the index of the button pressed to command line
-    private JButton getGridButton(int row, int column) 
+    private JButton getGridButton(int row, int column)
 	{
         int index = row * 5 + column;
         return buttonList.get(index);
     }
 
 	// create an individual button to place on the grid at position (row, col)
-    private JButton createGridButton(final int row, final int col) 
-	{		
+    private JButton createGridButton(final int row, final int col)
+	{
         final JButton newButton = new JButton();
-        newButton.addActionListener(new ActionListener() 
+        newButton.addActionListener(new ActionListener()
 		{
             @Override
-            public void actionPerformed(ActionEvent e) 
+            public void actionPerformed(ActionEvent e)
 			{
                 JButton gridButton = PreMadeMaps.this.getGridButton(row, col);
                 // System.out.println("row" + row + ",col" + col);
-				
+
 				Object source = e.getSource();
 				if ( source instanceof Component )
 				{
@@ -162,7 +162,7 @@ public class PreMadeMaps
 							((Component)source).setBackground( Color.BLUE );
 						}
 					}
-					else 
+					else
 					{
 						if ( ((Component)source).getBackground() == Color.ORANGE )
 						{
@@ -176,22 +176,22 @@ public class PreMadeMaps
 				}
             }
         });
-		
+
 		Border line = new LineBorder( Color.BLACK );
 		Border margin = new EmptyBorder( 22, 22, 22, 22 );
 		Border compound = new CompoundBorder( line, margin );
 		newButton.setBorder( compound );
-		newButton.setBackground( Color.WHITE );		
-				
+		newButton.setBackground( Color.WHITE );
+
         return newButton;
     }
 
 	// create the panel to hold the button grid
-    private JPanel createGridPanel() 
+    private JPanel createGridPanel()
 	{
         JPanel mapPanel = new JPanel(new GridLayout(fileRows, fileColumns));
-		
-        for (int i = 0; i < fileRows * fileColumns; i++) 
+
+        for (int i = 0; i < fileRows * fileColumns; i++)
 		{
             int row = i / fileRows;
             int col = i % fileColumns;
@@ -199,16 +199,16 @@ public class PreMadeMaps
             buttonList.add(gridButton);
             mapPanel.add(gridButton);
         }
-		
+
 		// read from the file to create the predesigned map
 		BufferedReader newBufferedReader = null;
-        try 
+        try
 		{
             newBufferedReader = new BufferedReader(new FileReader(mapTextName));
             String line;
 			int count = 0;
-			
-            while ((line = newBufferedReader.readLine()) != null) 
+
+            while ((line = newBufferedReader.readLine()) != null)
 			{
 				String text = line;
 				text.trim();
@@ -236,50 +236,50 @@ public class PreMadeMaps
 				}
 				count++;
             }
-        } 
-		catch (IOException e) 
+        }
+		catch (IOException e)
 		{
             e.printStackTrace();
-        } 
-		finally 
+        }
+		finally
 		{
-            try 
+            try
 			{
-                if (newBufferedReader != null) 
+                if (newBufferedReader != null)
 				{
                     newBufferedReader.close();
                 }
-            } 
-			catch (IOException ex) 
+            }
+			catch (IOException ex)
 			{
                 ex.printStackTrace();
             }
 		}
-		
-		
+
+
         return mapPanel;
     }
 
 	// create the JFrame to display to the screen
-    private void display() 
+    private void display()
 	{
 		// load the rows and columns from the file
 		readTextFileColumns();
 		readTextFileRows();
-		
-		// create the frame 
+
+		// create the frame
         JFrame mapFrame = new JFrame("Dungeons and Dragons Map");
-        mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+        mapFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
 		// create the big panel that will hold the grid and the turn buttons
 		JPanel MAINPANEL = new JPanel(new FlowLayout());
         MAINPANEL.add(createGridPanel());
-		
+
 		// create the changeTurn panel that will hold the change turn button and the counter
 		JPanel changeTurn = new JPanel(new FlowLayout());
 		JButton changeTurnButton = new JButton("Change Turn");
-		
-		// set the shape of the counter 
+
+		// set the shape of the counter
 		JButton currentTurn = new JButton("Player 1's Turn");
 		currentTurn.setEnabled(false);
 		Border line2 = new LineBorder( Color.BLACK );
@@ -288,12 +288,12 @@ public class PreMadeMaps
 		Border compound2 = new CompoundBorder( line2, margin2 );
 		currentTurn.setBorder( compound2 );
 		currentTurn.setBackground( Color.WHITE );
-		
+
 		// add an action listener to the change turn button
-		changeTurnButton.addActionListener(new ActionListener() 
+		changeTurnButton.addActionListener(new ActionListener()
 		{
             @Override
-            public void actionPerformed(ActionEvent e) 
+            public void actionPerformed(ActionEvent e)
 			{
 				Object source = e.getSource();
 				if ( source instanceof Component )
@@ -325,7 +325,7 @@ public class PreMadeMaps
 				}
             }
         });
-		
+
 		// set the shape of the change turn button
 		Border line1 = new LineBorder( Color.BLACK );
 		Border margin1 = new EmptyBorder( 30, 30, 30, 30 );
@@ -334,9 +334,9 @@ public class PreMadeMaps
 		changeTurnButton.setBackground( Color.WHITE );
 		changeTurnButton.setFont(new Font("Arial", Font.PLAIN, 20));
 		changeTurn.add(changeTurnButton);
-		
+
 		changeTurn.add(currentTurn);
-		
+
 		// add the change turn panel to the big panel panel
 		MAINPANEL.add(changeTurn);
 		// add the big main panel to the frame
@@ -346,16 +346,16 @@ public class PreMadeMaps
         mapFrame.setVisible(true);
     }
 
-    /*public static void main(String[] args) 
+    /*public static void main(String[] args)
 	{
-        EventQueue.invokeLater(new Runnable() 
+        EventQueue.invokeLater(new Runnable()
 		{
             @Override
-            public void run() 
+            public void run()
 			{
                 new PreMadeMaps().display();
             }
         });
-		
+
     }*/
 }

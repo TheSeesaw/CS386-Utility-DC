@@ -75,7 +75,7 @@ public class UserManagement
 
 
 
-// update the text file with the new users
+// update the text file with the new user
   public void updateFile( User user )
   {
 
@@ -171,13 +171,20 @@ public class UserManagement
 // see if a password is valid: valid if not empty
   private boolean checkPasswordValidity( String password )
   {
-    if( password.compareTo( "" ) == 0)
+    if( password.length() >= 5 )
     {
+      for( int i = 0; i<password.length(); i++)
+      {
+        if( Character.isDigit( password.charAt( i ) ) )
+        {
+          return true;
+        }
+      }
       return false;
     }
     else
     {
-      return true;
+      return false;
     }
   }
 

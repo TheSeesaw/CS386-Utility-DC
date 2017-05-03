@@ -206,7 +206,7 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   {
     current_user = user;
 
-    co_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    co_window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     co_window.setSize(600, 800);
 
     // Add content

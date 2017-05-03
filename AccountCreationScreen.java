@@ -113,7 +113,7 @@ public class AccountCreationScreen
             // error
             else if( checkPasswordCorrectness == 'p' )
             {
-              messageField.setText( "Invalid Password" );
+              messageField.setText( "Invalid Password: must be at least 5 characters and contain 1 number" );
             }
 
             // successful login attempt
