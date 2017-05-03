@@ -20,7 +20,7 @@ public class MainMenu
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
     characterCreationButton = new JButton( "Character Creation" );
-    abilityCreationButton = new JButton( "Abiltiy Creation" );
+    abilityCreationButton = new JButton( "Ability Creation" );
     mapCreationButton = new JButton( "Map Creation");
     characterCreationButton.addActionListener( new ButtonListener() );
     abilityCreationButton.addActionListener( new ButtonListener() );
@@ -50,12 +50,23 @@ public class MainMenu
         //  frame.setVisible( false );
         }
 		// handle map creation button
-		else if( e.getActionCommand().equals( "Map Creation" ) )
-        {
-		  // enter the name of the text file you will load here
-          PreMadeMaps maps_window = new PreMadeMaps("testfilemap2.txt");
-//          frame.setVisible( false );
-        }
+      else if( e.getActionCommand().equals( "Map Creation" ) )
+      {
+	  // enter the name of the text file you will load here
+        PreMadeMaps maps_window = new PreMadeMaps("testfilemap2.txt");
+
       }
+
+      // the ability stuff should go here
+      else if( e.getActionCommand().equals( "Ability Creation" ) )
+      {
+        // open the ability window
+        // make sure the default close operation for your frame is HIDE_ON_CLOSE not EXIT_ON_CLOSE
+      }
+
+
+      }
+
+
   }
 }
