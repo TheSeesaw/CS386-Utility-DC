@@ -230,7 +230,7 @@ public class PreMadeMaps
 						else if ( text.charAt(i) == 'M' )
 						{
 							buttonList.get(count * fileColumns + i).setBackground( Color.RED );
-							buttonList.get(count * fileColumns + i).setEnabled(false);
+							buttonList.get(count * fileColumns + i).setEnabled(true);
 						}
 						else
 						{
