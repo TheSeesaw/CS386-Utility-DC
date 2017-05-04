@@ -142,13 +142,13 @@ public class PreMadeMaps
 					}
 					else if ( turnNumber == 2 )
 					{
-						if ( ((Component)source).getBackground() == Color.RED )
+						if ( ((Component)source).getBackground() == Color.MAGENTA )
 						{
 							((Component)source).setBackground( Color.WHITE );
 						}
 						else
 						{
-							((Component)source).setBackground( Color.RED );
+							((Component)source).setBackground( Color.MAGENTA );
 						}
 					}
 					else if ( turnNumber == 3 )
@@ -225,6 +225,11 @@ public class PreMadeMaps
 						if ( text.charAt(i) == '-' )
 						{
 							buttonList.get(count * fileColumns + i).setBackground( Color.BLACK );
+							buttonList.get(count * fileColumns + i).setEnabled(false);
+						}
+						else if ( text.charAt(i) == 'M' )
+						{
+							buttonList.get(count * fileColumns + i).setBackground( Color.RED );
 							buttonList.get(count * fileColumns + i).setEnabled(false);
 						}
 						else
