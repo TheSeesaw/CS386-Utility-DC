@@ -61,7 +61,7 @@ public class MainMenu
       else if( e.getActionCommand().equals( "Ability Creation" ) )
       {
         // open the ability window
-        // make sure the default close operation for your frame is HIDE_ON_CLOSE not EXIT_ON_CLOSE
+        AbilityCreationGUI ability_window = new AbilityCreationGUI(validUser)
       }
 
 
