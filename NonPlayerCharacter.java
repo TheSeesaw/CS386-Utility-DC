@@ -60,4 +60,5 @@ public class NonPlayerCharacter extends CharacterObject
   {
 
   }
+
 }

@@ -271,9 +271,65 @@ public class Utilities
          npc_ob.setBAB((int)bab);
       }
    }
+   public static int rollHP(NonPlayerCharacter npc_ob)
+   {
+      int hp = 0;
+      int hd = npc_ob.getLevel();
+      for (int i = 0; i < hd; i++)
+      {
+         hp += Utilities.rollDie(npc_ob.getHDSize()) + npc_ob.getABModifier("con");
+      }
+      return hp;
+   }
    // Return a string representation of an attack value
    public static String convertAttackValue(NonPlayerCharacter npc_ob, int attack_index)
    {
-      return "";
+      // Get the attack signature from the character object
+      int[] attack_sig = npc_ob.getAttackSignature(attack_index);
+      String attack_str = "Unarmed ";
+      // add the attack bonus
+      if (attack_sig[0] < 0)
+      {
+         // Attack bonus is negative
+         attack_str += "-";
+      }
+      else // Attack bonus is positive
+      {
+         attack_str += "+";
+      }
+      attack_str += attack_sig[0] + " (";
+      // Attack range
+      //attack_str += attack_sig[4] + "ft ";
+      // Number of damage die
+      attack_str += attack_sig[5];
+      // Damage die size
+      attack_str += "d" + attack_sig[6];
+      // Damage bonus
+      if (attack_sig[7] < 0)
+      {
+         // Damage bonus is negative
+         attack_str += "-";
+      }
+      else // Damage bonus is positive
+      {
+         attack_str += "+";
+      }
+      attack_str += attack_sig[7];
+      // Damage type
+      switch(attack_sig[3])
+      {
+         case 0:
+            attack_str += " blunt ";
+            break;
+         case 1:
+            attack_str += " piercing ";
+            break;
+         case 2:
+            attack_str += " slashing ";
+      }
+      // TODO: calculate crit signature based on information in attack signature
+      attack_str += "x2)";
+      // Return final string
+      return attack_str;
    }
 }

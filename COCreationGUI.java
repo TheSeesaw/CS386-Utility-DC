@@ -11,10 +11,20 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
   String[] race_array = {"Dwarf", "Elf", "Gnome", "Half-Elf", "Half-Orc", "Halfling", "Human"};
   String[] npc_job_array = {"Adept", "Aristocrat", "Commoner", "Expert", "Warrior"};
 
-  // Save button
-  JButton save = new JButton("Save Changes");
-  // Back button
-  JButton back = new JButton("Back to Menu");
+  // Save buttons for each panel
+  JButton save1 = new JButton("Save Changes");
+  JButton save2 = new JButton("Save Changes");
+  JButton save3 = new JButton("Save Changes");
+  JButton save4 = new JButton("Save Changes");
+  JButton save5 = new JButton("Save Changes");
+  JButton save6 = new JButton("Save Changes");
+  // Back buttons for each panel
+  JButton back1 = new JButton("Back to Menu");
+  JButton back2 = new JButton("Back to Menu");
+  JButton back3 = new JButton("Back to Menu");
+  JButton back4 = new JButton("Back to Menu");
+  JButton back5 = new JButton("Back to Menu");
+  JButton back6 = new JButton("Back to Menu");
 
   // Declare variable for character creation jframe, made global for disposing purposes
   JFrame co_window = new JFrame("Create New Character Object");
@@ -159,10 +169,32 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     JPanel skills_feats = new JPanel();
     JPanel gear_items = new JPanel();
     JPanel spells_abilities = new JPanel();
-    save.addActionListener(new ButtonListener());
-    save.setActionCommand("save");
-    back.addActionListener(new ButtonListener());
-    back.setActionCommand("back");
+
+    save1.addActionListener(new ButtonListener());
+    save1.setActionCommand("save");
+    save2.addActionListener(new ButtonListener());
+    save2.setActionCommand("save");
+    save3.addActionListener(new ButtonListener());
+    save3.setActionCommand("save");
+    save4.addActionListener(new ButtonListener());
+    save4.setActionCommand("save");
+    save5.addActionListener(new ButtonListener());
+    save5.setActionCommand("save");
+    save6.addActionListener(new ButtonListener());
+    save6.setActionCommand("save");
+
+    back1.addActionListener(new ButtonListener());
+    back1.setActionCommand("back");
+    back2.addActionListener(new ButtonListener());
+    back2.setActionCommand("back");
+    back3.addActionListener(new ButtonListener());
+    back3.setActionCommand("back");
+    back4.addActionListener(new ButtonListener());
+    back4.setActionCommand("back");
+    back5.addActionListener(new ButtonListener());
+    back5.setActionCommand("back");
+    back6.addActionListener(new ButtonListener());
+    back6.setActionCommand("back");
 
     // Details panel functionality==============================================
 
@@ -372,10 +404,18 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
     co_tabs.addTab(GEARITEMS, gear_items);
     co_tabs.addTab(SPELLSABILITIES, spells_abilities);
     // Add the save and back buttons to all the panels
-    details.add(save);
-    details.add(back);
-    base_stats.add(save);
-    base_stats.add(back);
+    details.add(save1);
+    base_stats.add(save2);
+    combat_stats.add(save3);
+    skills_feats.add(save4);
+    gear_items.add(save5);
+    spells_abilities.add(save6);
+    details.add(back1);
+    base_stats.add(back2);
+    combat_stats.add(back3);
+    skills_feats.add(back4);
+    gear_items.add(back5);
+    spells_abilities.add(back6);
     // Add this component to the pane passed into this function
     pane.add(co_tabs, BorderLayout.CENTER);
   }
@@ -407,6 +447,8 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
          {
             case "reroll hitpoints":
                // re-roll hitpoints
+               test_npc.setHDSize(Utilities.getNPCHitDie(test_npc));
+               t_hp_d.setText(Integer.toString(Utilities.rollHP(test_npc)));
                break;
             case "update combat stats":
                // re-calculate attack bonuses, AC's, CMB, CMD
@@ -421,8 +463,10 @@ public class COCreationGUI //extends JFrame implements ActionListener, WindowLis
                cmb_d.setText(Integer.toString(test_npc.getCMB()));
                cmd_d.setText(Integer.toString(test_npc.getCMD()));
                // Calculate primary attack
+               test_npc.initializeAttackSignature(0);
                p_att_d.setText(Utilities.convertAttackValue(test_npc, 0));
                // Calculate secondary attack
+               test_npc.initializeAttackSignature(1);
                s_att_d.setText(Utilities.convertAttackValue(test_npc, 1));
                break;
             case "update saves":
